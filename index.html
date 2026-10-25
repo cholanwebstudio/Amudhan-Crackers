@@ -688,6 +688,14 @@
   .faq-item{background:#fff; border:1px solid var(--line); padding:16px 20px;}
   .faq-item summary{cursor:pointer; font-weight:700; color:var(--ink);}
   .faq-item p{margin:10px 0 0; color:var(--ink-soft);}
+
+  /* Image-only price list: mobile-first, readable without horizontal scrolling */
+  .price-image-list{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;max-width:900px;margin:0 auto;}
+  .price-image-card{margin:0;padding:6px;background:#fff;border:1px solid rgba(120,65,25,.18);border-radius:12px;overflow:hidden;box-shadow:0 5px 18px rgba(60,30,10,.07);}
+  .price-list-image{width:100%;height:auto;display:block;object-fit:contain;cursor:zoom-in;border-radius:7px;}
+  @media(min-width:760px){.price-image-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.price-image-card{padding:9px}}
+  @media(max-width:600px){.price-image-list{gap:10px}.price-image-card{padding:4px;border-radius:9px}.section-pad.order-section{padding-block:2.5rem}.price-list-image{width:100%;height:auto}}
+
 </style>
 </head>
 <body>
@@ -877,34 +885,20 @@
   </section>
 
 
-  <!-- ===================== PRODUCT ORDERING ===================== -->
+  <!-- ===================== PRICE LIST IMAGES ===================== -->
   <section class="section-pad order-section" id="products" aria-labelledby="products-heading">
     <div class="container">
       <div class="section-head center reveal">
-        <span class="kicker">Product Catalogue</span>
-        <h2 id="products-heading">Choose Your Crackers</h2>
+        <span class="kicker">Amudhan Crackers</span>
+        <h2 id="products-heading">Price List &amp; Offers</h2>
         <div class="divider-gold center"></div>
+        <p style="margin-inline:auto">Tap any image to view it larger. Optimised for mobile screens.</p>
       </div>
-      <p class="catalogue-intro">Explore Amudhan Crackers, your local destination for crackers in Cuddalore. Select the products you need, set the quantity, and send your complete selection directly to Amudhan Crackers on WhatsApp. <strong>Prices are shown in the catalogue. Select quantity to see your item total.</strong></p>
-      <div class="catalogue-tools">
-        <input class="catalogue-search" id="productSearch" type="search" placeholder="Search product name or code…" aria-label="Search products">
-        <select class="catalogue-filter" id="productFilter" aria-label="Filter by category"><option value="all">All Categories</option></select>
-        <span class="catalogue-count" id="productCount"></span>
-      </div>
-      <div class="product-grid" id="productGrid"></div>
-      <div class="order-bar">
-        <div class="order-summary" id="orderSummary">0 products selected<small>Select items above and add quantities.</small></div>
-        <button class="whatsapp-order" id="sendOrderBtn" type="button" aria-label="Send selected products on WhatsApp">WhatsApp Order ↗</button>
-      </div>
-      <div class="mobile-quick-links" aria-label="Quick navigation">
-        <a href="#showroom">Showroom</a>
-        <a href="#location">Location</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <div class="catalogue-pages" aria-label="Original product catalogue sheets">
-        <figure class="catalogue-page"><img id="catImg1" src="catalogue-1.jpg" alt="Amudhan Crackers price list page 1" loading="lazy" decoding="async"><figcaption>Catalogue — Page 1</figcaption></figure>
-        <figure class="catalogue-page"><img id="catImg2" src="catalogue-2.jpg" alt="Amudhan Crackers price list page 2" loading="lazy" decoding="async"><figcaption>Catalogue — Page 2</figcaption></figure>
-        <figure class="catalogue-page"><img id="catImg3" src="catalogue-3.jpg" alt="Amudhan Crackers mega Diwali combo offers" loading="lazy" decoding="async"><figcaption>Mega Diwali Offers</figcaption></figure>
+      <div class="price-image-list" aria-label="Amudhan Crackers price list images">
+        <figure class="price-image-card"><img class="price-list-image" src="price-list-promo.jpg" alt="Amudhan Crackers shop information and promotion" loading="lazy" decoding="async"></figure>
+        <figure class="price-image-card"><img class="price-list-image" src="price-list-mega-combo.jpg" alt="Amudhan Crackers mega combo offers and prices" loading="lazy" decoding="async"></figure>
+        <figure class="price-image-card"><img class="price-list-image" src="price-list-page-1.jpg" alt="Amudhan Crackers price list page one" loading="lazy" decoding="async"></figure>
+        <figure class="price-image-card"><img class="price-list-image" src="price-list-page-2.jpg" alt="Amudhan Crackers price list page two" loading="lazy" decoding="async"></figure>
       </div>
     </div>
   </section>
@@ -1213,18 +1207,17 @@
     if(e.key === 'ArrowRight'){ showRelative(1); }
   });
 
-  /* ---------- Catalogue image viewer ---------- */
-  ['catImg1','catImg2','catImg3'].forEach(function(id,idx){
-    var img=document.getElementById(id);
-    if(img){ img.addEventListener('click',function(){
+  /* ---------- Price-list image viewer ---------- */
+  document.querySelectorAll('.price-list-image').forEach(function(img){
+    img.addEventListener('click',function(){
       lbImg.src=img.src;
       lbImg.alt=img.alt;
-      lbCaption.textContent=['Catalogue — Page 1','Catalogue — Page 2','Mega Diwali Offers'][idx];
+      lbCaption.textContent=img.alt;
       document.getElementById('lbPrev').style.display='none';
       document.getElementById('lbNext').style.display='none';
       lightbox.classList.add('open');
       document.body.style.overflow='hidden';
-    });}
+    });
   });
   var originalClose=closeLightbox;
   document.getElementById('lbClose').addEventListener('click',function(){
@@ -1233,67 +1226,7 @@
   });
 
 
-  /* ---------- Product catalogue + WhatsApp ordering ---------- */
-  var productData = [{"cat": "Sound Crackers", "no": 1, "name": "3 1/2\" Kuruvi Vedi", "price": 24}, {"cat": "Sound Crackers", "no": 2, "name": "2 3/4\" Kuruvi Vedi", "price": 16}, {"cat": "Sound Crackers", "no": 3, "name": "4\" Lakshmi Vedi", "price": 34}, {"cat": "Sound Crackers", "no": 4, "name": "2\" Lakshmi Vedi", "price": 56}, {"cat": "Sound Crackers", "no": 5, "name": "Gold Lakshmi Vedi", "price": 65}, {"cat": "Sound Crackers", "no": 6, "name": "Jallikattu Vedi", "price": 90}, {"cat": "Ground Chakars", "no": 7, "name": "Ground Chakkar Big – 10 Pcs", "price": 72}, {"cat": "Ground Chakars", "no": 8, "name": "Ground Chakkar Big – 25 Pcs", "price": 175}, {"cat": "Ground Chakars", "no": 9, "name": "Ground Chakkar Ashoka", "price": 90}, {"cat": "Ground Chakars", "no": 10, "name": "Ground Chakkar Special", "price": 125}, {"cat": "Ground Chakars", "no": 11, "name": "Ground Chakkar Special", "price": 230}, {"cat": "Flower Pots", "no": 12, "name": "Flower Pot Small", "price": 75}, {"cat": "Flower Pots", "no": 13, "name": "Flower Pot Big", "price": 115}, {"cat": "Flower Pots", "no": 14, "name": "Flower Pot Colour", "price": 175}, {"cat": "Flower Pots", "no": 15, "name": "Flower Pot Ashoka", "price": 230}, {"cat": "Flower Pots", "no": 16, "name": "Gulab Pot", "price": 340}, {"cat": "Flower Pots", "no": 17, "name": "Flower Pot Special – 5 Pcs", "price": 340}, {"cat": "Flower Pots", "no": 18, "name": "Colour Koti / Fountain – 5 Pcs", "price": 360}, {"cat": "Flower Pots", "no": 19, "name": "Colour Koti Multi Colour Big – 10 Pcs", "price": 850}, {"cat": "Flower Pots", "no": 20, "name": "Three Colour Fountain", "price": 550}, {"cat": "Colour Pencil", "no": 21, "name": "10 cm Pencil", "price": 180}, {"cat": "Colour Pencil", "no": 22, "name": "12 cm Delight Pencil", "price": 240}, {"cat": "Colour Pencil", "no": 23, "name": "15 cm Pencil Big – 10 Pcs", "price": 330}, {"cat": "Colour Pencil", "no": 24, "name": "Colour Smoke – 3 Pcs", "price": 300}, {"cat": "Colour Pencil", "no": 25, "name": "Colour Smoke – 3 Pcs", "price": 260}, {"cat": "Twinkling Star", "no": 26, "name": "1 1/2\" Twinkling Star", "price": 60}, {"cat": "Twinkling Star", "no": 27, "name": "4\" Twinkling Star", "price": 140}, {"cat": "Atom Bombs", "no": 28, "name": "Hydro Bomb Green", "price": 60}, {"cat": "Atom Bombs", "no": 29, "name": "Gorilla Bomb", "price": 110}, {"cat": "Atom Bombs", "no": 30, "name": "Jurassic Bomb", "price": 150}, {"cat": "Atom Bombs", "no": 31, "name": "Atom Bomb Special", "price": 200}, {"cat": "Electric Crackers", "no": 32, "name": "50 Bijili Vedi", "price": 35}, {"cat": "Electric Crackers", "no": 33, "name": "100 Bijili Vedi", "price": 65}, {"cat": "Electric Crackers", "no": 34, "name": "100 Strip Bijili Vedi", "price": 70}, {"cat": "Electric Crackers", "no": 35, "name": "28 Chorcha", "price": 30}, {"cat": "Electric Crackers", "no": 36, "name": "56 Chorcha", "price": 55}, {"cat": "Electric Crackers", "no": 37, "name": "28 Giant", "price": 45}, {"cat": "Electric Crackers", "no": 38, "name": "56 Giant", "price": 90}, {"cat": "Electric Crackers", "no": 39, "name": "24 Deluxe", "price": 85}, {"cat": "Electric Crackers", "no": 40, "name": "32 Deluxe", "price": 115}, {"cat": "Electric Crackers", "no": 41, "name": "100 Deluxe", "price": 210}, {"cat": "Electric Crackers", "no": 42, "name": "100 Lakkas", "price": 360}, {"cat": "Electric Crackers", "no": 43, "name": "200 Lakkas", "price": 80}, {"cat": "Electric Crackers", "no": 44, "name": "200 Crackers", "price": 160}, {"cat": "Electric Crackers", "no": 45, "name": "Mega Bijili", "price": 95}, {"cat": "Fancy Flower Pots", "no": 46, "name": "Colour Koti Deluxe Long – 10 Pcs", "price": 280}, {"cat": "Fancy Flower Pots", "no": 47, "name": "Colour Koti Deluxe Giant Long – 10 Pcs", "price": 480}, {"cat": "Fancy Flower Pots", "no": 48, "name": "Colour Koti UV Short", "price": 900}, {"cat": "Fancy Flower Pots", "no": 49, "name": "Multi Colour Giant Deluxe – 10 Pcs", "price": 380}, {"cat": "Fancy Flower Pots", "no": 50, "name": "Multi Colour Giant – 10 Pcs", "price": 900}, {"cat": "Fancy Flower Pots", "no": 51, "name": "Multicolour Giant – 10 Pcs", "price": 550}, {"cat": "Fancy Items", "no": 52, "name": "Ganga Jamuna", "price": 230}, {"cat": "Fancy Items", "no": 53, "name": "Chittu Puttu", "price": 330}, {"cat": "Fancy Items", "no": 54, "name": "12 cm Fancy Item", "price": 110}, {"cat": "Fancy Items", "no": 55, "name": "12 Shot Item", "price": 250}, {"cat": "Fancy Items", "no": 56, "name": "25 Shot Item", "price": 500}, {"cat": "Fancy Items", "no": 57, "name": "20 Shot Crackers", "price": 750}, {"cat": "Fancy Items", "no": 58, "name": "Fancy Item", "price": 330}, {"cat": "Sizzling Series", "no": 59, "name": "Siren Small – 5 Pcs", "price": 240}, {"cat": "Sizzling Series", "no": 60, "name": "Mega Siren – 2 Pcs", "price": 280}, {"cat": "Sizzling Series", "no": 61, "name": "Magic Shot", "price": 160}, {"cat": "Sizzling Series", "no": 62, "name": "Magic Show – 1 Millionaire", "price": 410}, {"cat": "Sizzling Series", "no": 63, "name": "Pata Peacock Pink", "price": 650}, {"cat": "Sizzling Series", "no": 64, "name": "Magical Effect / DJ Sound", "price": 300}, {"cat": "Sizzling Series", "no": 65, "name": "Sky Shot Rider – 10 Pcs", "price": 240}, {"cat": "Sizzling Series", "no": 66, "name": "Pata Peacock Silver", "price": 620}, {"cat": "Sizzling Series", "no": 67, "name": "Photo Flash – 5 Pcs", "price": 230}, {"cat": "Sizzling Series", "no": 68, "name": "Helicopter – 5 Pcs", "price": 300}, {"cat": "Sizzling Series", "no": 69, "name": "Mega Peacock", "price": 300}, {"cat": "Sizzling Series", "no": 70, "name": "Bambaram – 10 Pcs", "price": 200}, {"cat": "Multicolour Single Shot", "no": 71, "name": "2\" Fancy Colour Shot", "price": 180}, {"cat": "Multicolour Single Shot", "no": 72, "name": "2 1/2\" Fancy Colour Shot", "price": 230}, {"cat": "Multicolour Single Shot", "no": 73, "name": "3\" Fancy Colour Shot – 2 Pcs", "price": 380}, {"cat": "Multicolour Single Shot", "no": 74, "name": "3 1/2\" Fancy Colour Shot", "price": 380}, {"cat": "Multicolour Single Shot", "no": 75, "name": "3 1/2\" Fancy Flower Ball", "price": 630}, {"cat": "Multicolour Single Shot", "no": 76, "name": "4\" Fancy Colour Shot", "price": 430}, {"cat": "Multicolour Single Shot", "no": 77, "name": "2\" Fancy Colour Shot – 3 Pcs", "price": 530}, {"cat": "Multicolour Single Shot", "no": 78, "name": "2 1/2\" Fancy Colour Shot – 3 Pcs", "price": 600}, {"cat": "Multicolour Shots", "no": 79, "name": "15 Shot Multicolour", "price": 420}, {"cat": "Multicolour Shots", "no": 80, "name": "30 Shot Multicolour", "price": 650}, {"cat": "Multicolour Shots", "no": 81, "name": "60 Shot Multicolour", "price": 1150}, {"cat": "Multicolour Shots", "no": 82, "name": "60 Shot Paradise", "price": 1600}, {"cat": "Multicolour Shots", "no": 83, "name": "120 Shot Multicolour", "price": 2300}, {"cat": "Multicolour Shots", "no": 84, "name": "240 Shot Multicolour", "price": 4600}, {"cat": "Multicolour Shots", "no": 85, "name": "20 Shot Set Out", "price": 4200}, {"cat": "Multicolour Shots", "no": 86, "name": "25 Shot Dasara Set Out", "price": 5400}, {"cat": "Multicolour Shots", "no": 87, "name": "30 Shot Fancy Set Out", "price": 6000}, {"cat": "Rangoli Series", "no": 88, "name": "Holy Night – 6 Pcs", "price": 320}, {"cat": "Rangoli Series", "no": 89, "name": "Vandhan Shot – 5 Pcs", "price": 320}, {"cat": "Rangoli Series", "no": 90, "name": "Kakrailla Bomb", "price": 280}, {"cat": "Rangoli Series", "no": 91, "name": "Peacock", "price": 120}, {"cat": "Rangoli Series", "no": 92, "name": "Colour Celebration", "price": 350}, {"cat": "Rangoli Series", "no": 93, "name": "Sizzler – 5 Pcs", "price": 320}, {"cat": "Rangoli Series", "no": 94, "name": "Golden Shower – Black & White", "price": 220}, {"cat": "Rangoli Series", "no": 95, "name": "Butterfly", "price": 180}, {"cat": "Rangoli Series", "no": 96, "name": "4\" Fancy Fountain – 2 Pcs", "price": 320}, {"cat": "Rangoli Series", "no": 97, "name": "Cool Pencil / Malabar Pencil – 2 Pcs", "price": 260}, {"cat": "Rangoli Series", "no": 98, "name": "Colour Stone Big", "price": 50}, {"cat": "Rangoli Series", "no": 99, "name": "White Gun – 5 Pcs", "price": 320}, {"cat": "Gift Box", "no": 100, "name": "21 Items Gift Box", "price": 600}, {"cat": "Gift Box", "no": 101, "name": "21 Items Gift Box", "price": 750}, {"cat": "Gift Box", "no": 102, "name": "24 Items Gift Box", "price": 1050}, {"cat": "Gift Box", "no": 103, "name": "30 Items Gift Box", "price": 1150}, {"cat": "Gift Box", "no": 104, "name": "35 Items Gift Box", "price": 1450}, {"cat": "Gift Box", "no": 105, "name": "45 Items Gift Box", "price": 1650}, {"cat": "Gift Box", "no": 106, "name": "50 Items Gift Box", "price": 1950}, {"cat": "New / Fancy Crackers", "no": 107, "name": "Super Deluxe 10 in 1", "price": 150}, {"cat": "New / Fancy Crackers", "no": 108, "name": "Classic Crackers", "price": 240}, {"cat": "New / Fancy Crackers", "no": 109, "name": "7 Up Deluxe", "price": 270}, {"cat": "New / Fancy Crackers", "no": 110, "name": "VIP LM Deluxe", "price": 360}, {"cat": "New / Fancy Crackers", "no": 111, "name": "VIP Colour LM Crackers", "price": 380}, {"cat": "New / Fancy Crackers", "no": 112, "name": "Medium Shot", "price": 320}, {"cat": "New / Fancy Crackers", "no": 113, "name": "Star Series", "price": 200}, {"cat": "New / Fancy Crackers", "no": 114, "name": "75 cm Cracking Wire", "price": 22}, {"cat": "New / Fancy Crackers", "no": 115, "name": "7 cm Green Cracking Wire", "price": 24}, {"cat": "New / Fancy Crackers", "no": 116, "name": "7 cm Red Cracking Wire", "price": 28}, {"cat": "New / Fancy Crackers", "no": 117, "name": "10 cm Electric Cracking Wire", "price": 145}, {"cat": "New / Fancy Crackers", "no": 118, "name": "10 cm Green Cracking Wire", "price": 33}, {"cat": "New / Fancy Crackers", "no": 119, "name": "10 cm Red Cracking Wire", "price": 35}, {"cat": "New / Fancy Crackers", "no": 120, "name": "15 cm Silver Cracking Wire", "price": 36}, {"cat": "New / Fancy Crackers", "no": 121, "name": "30 cm Electric Cracking Wire", "price": 38}, {"cat": "New / Fancy Crackers", "no": 122, "name": "30 cm Cracking Wire", "price": 38}, {"cat": "New / Fancy Crackers", "no": 123, "name": "30 cm Green Cracking Wire", "price": 38}, {"cat": "New / Fancy Crackers", "no": 124, "name": "30 cm Star Drops Cracking Wire", "price": 40}, {"cat": "New / Fancy Crackers", "no": 125, "name": "50 cm Electric Cracking Wire", "price": 45}, {"cat": "New / Fancy Crackers", "no": 126, "name": "50 cm Cracking Wire", "price": 50}, {"cat": "New / Fancy Crackers", "no": 127, "name": "50 cm Jaguar Electric Cracking Wire", "price": 55}, {"cat": "New / Fancy Crackers", "no": 128, "name": "50 cm Jaguar Cracking Wire", "price": 55}, {"cat": "New / Fancy Crackers", "no": 129, "name": "75 cm Electric Cracking Wire", "price": 55}, {"cat": "New / Fancy Crackers", "no": 130, "name": "75 cm Multicolour Cracking Wire", "price": 70}, {"cat": "New / Fancy Crackers", "no": 131, "name": "30 cm Dancing Rose", "price": 75}, {"cat": "New / Fancy Crackers", "no": 132, "name": "Pistol Crackers – 2 Pcs", "price": 80}, {"cat": "New / Fancy Crackers", "no": 133, "name": "Lava Fountain – 3 Pcs", "price": 85}, {"cat": "New / Fancy Crackers", "no": 134, "name": "Anvil / Fancy Fountain", "price": 85}, {"cat": "New / Fancy Crackers", "no": 135, "name": "80 Watts – 5 Pcs", "price": 85}, {"cat": "New / Fancy Crackers", "no": 136, "name": "Spinner Shots", "price": 80}, {"cat": "New / Fancy Crackers", "no": 137, "name": "Mega Siren – 3 Pcs", "price": 70}, {"cat": "New / Fancy Crackers", "no": 138, "name": "Sparky Dots – 5 Pcs", "price": 75}, {"cat": "New / Fancy Crackers", "no": 139, "name": "Golden Asarappu Small – 10 Pcs", "price": 80}, {"cat": "New / Fancy Crackers", "no": 140, "name": "Sunlight & Moonlight – 5 Pcs", "price": 85}, {"cat": "New / Fancy Crackers", "no": 141, "name": "Crackling Fountain – 3 Pcs", "price": 85}, {"cat": "New / Fancy Crackers", "no": 142, "name": "6\" Fancy Fountain", "price": 85}, {"cat": "New / Fancy Crackers", "no": 143, "name": "25 Whistle Shot", "price": 80}, {"cat": "New / Fancy Crackers", "no": 144, "name": "900 CC Shot", "price": 310}, {"cat": "New / Fancy Crackers", "no": 145, "name": "2 1/2\" Hulk – 3 Pcs", "price": 350}, {"cat": "New / Fancy Crackers", "no": 146, "name": "2 1/2\" 25 Shot Fancy Set", "price": 400}, {"cat": "New / Fancy Crackers", "no": 147, "name": "2 1/2\" 30 Shot Fancy Set", "price": 350}, {"cat": "New / Fancy Crackers", "no": 148, "name": "5\" Fancy Colour Shot", "price": 400}, {"cat": "New / Fancy Crackers", "no": 149, "name": "10x10 Colour Crackers", "price": 440}, {"cat": "New / Fancy Crackers", "no": 150, "name": "5x5 Colour Crackers", "price": 480}, {"cat": "New / Fancy Crackers", "no": 151, "name": "Special Fountain", "price": 550}, {"cat": "New / Fancy Crackers", "no": 152, "name": "75 cm Multicolour Cracking Wire", "price": 600}, {"cat": "New / Fancy Crackers", "no": 153, "name": "30 cm Dancing Rose", "price": 370}, {"cat": "New / Fancy Crackers", "no": 154, "name": "Pistol Crackers – 2 Pcs", "price": 360}, {"cat": "New / Fancy Crackers", "no": 155, "name": "Lava Fountain – 3 Pcs", "price": 450}, {"cat": "New / Fancy Crackers", "no": 156, "name": "Wheel / Spinner Special", "price": 320}, {"cat": "New / Fancy Crackers", "no": 157, "name": "Mega Peacock Special", "price": 300}, {"cat": "New / Fancy Crackers", "no": 158, "name": "80 Watts – 5 Pcs", "price": 480}, {"cat": "New / Fancy Crackers", "no": 159, "name": "Sparkling Shot", "price": 350}, {"cat": "New / Fancy Crackers", "no": 160, "name": "Mega Siren", "price": 260}, {"cat": "New / Fancy Crackers", "no": 161, "name": "Sparky Dots", "price": 210}, {"cat": "New / Fancy Crackers", "no": 162, "name": "Colour Fountain", "price": 340}, {"cat": "New / Fancy Crackers", "no": 163, "name": "Spinner Shots", "price": 250}, {"cat": "New / Fancy Crackers", "no": 164, "name": "Mega Siren – 3 Pcs", "price": 260}, {"cat": "New / Fancy Crackers", "no": 165, "name": "Sparky Dots – 5 Pcs", "price": 420}, {"cat": "New / Fancy Crackers", "no": 166, "name": "Colour Fountain", "price": 320}, {"cat": "New / Fancy Crackers", "no": 167, "name": "Golden Asarappu Small – 10 Pcs", "price": 380}, {"cat": "New / Fancy Crackers", "no": 168, "name": "Sunlight & Moonlight – 5 Pcs", "price": 280}, {"cat": "New / Fancy Crackers", "no": 169, "name": "Crackling Fountain – 3 Pcs", "price": 240}, {"cat": "New / Fancy Crackers", "no": 170, "name": "6\" Fancy Fountain", "price": 320}, {"cat": "New / Fancy Crackers", "no": 171, "name": "Sparky Dots – 5 Pcs", "price": 200}, {"cat": "New / Fancy Crackers", "no": 172, "name": "25 Whistle Shot", "price": 500}, {"cat": "New / Fancy Crackers", "no": 173, "name": "900 CC Shot", "price": 75}, {"cat": "New / Fancy Crackers", "no": 174, "name": "2 1/2\" Hulk – 3 Pcs", "price": 240}, {"cat": "New / Fancy Crackers", "no": 175, "name": "2 1/2\" 25 Shot Fancy Set", "price": 400}, {"cat": "New / Fancy Crackers", "no": 176, "name": "2 1/2\" 30 Shot Fancy Set", "price": 280}, {"cat": "New / Fancy Crackers", "no": 177, "name": "5\" Fancy Colour Shot", "price": 500}, {"cat": "New / Fancy Crackers", "no": 178, "name": "10x10 Colour Crackers", "price": 260}, {"cat": "New / Fancy Crackers", "no": 179, "name": "5x5 Colour Crackers", "price": 300}, {"cat": "New / Fancy Crackers", "no": 180, "name": "Special Fountain", "price": 90}, {"cat": "New / Fancy Crackers", "no": 181, "name": "Sunlight & Moonlight – 5 Pcs", "price": 70}, {"cat": "New / Fancy Crackers", "no": 182, "name": "Crackling Fountain – 3 Pcs", "price": 170}, {"cat": "New / Fancy Crackers", "no": 183, "name": "6\" Fancy Fountain", "price": 550}, {"cat": "New / Fancy Crackers", "no": 184, "name": "2\" Fancy Fountain – 2 Pcs", "price": 350}, {"cat": "New / Fancy Crackers", "no": 185, "name": "Colour Stone Big", "price": 250}, {"cat": "New / Fancy Crackers", "no": 186, "name": "Bomb / Crackle Special", "price": 50}, {"cat": "New / Fancy Crackers", "no": 187, "name": "White Gun – 5 Pcs", "price": 450}, {"cat": "New / Fancy Crackers", "no": 188, "name": "25 Whistle Shot", "price": 1100}, {"cat": "New / Fancy Crackers", "no": 189, "name": "900 CC Shot", "price": 300}, {"cat": "New / Fancy Crackers", "no": 190, "name": "10x10 Colour Crackers", "price": 5000}, {"cat": "New / Fancy Crackers", "no": 191, "name": "2 1/2\" Hulk – 3 Pcs", "price": 700}, {"cat": "New / Fancy Crackers", "no": 192, "name": "2 1/2\" 25 Shot Fancy Set", "price": 700}, {"cat": "New / Fancy Crackers", "no": 193, "name": "2 1/2\" 30 Shot Fancy Set", "price": 1100}, {"cat": "New / Fancy Crackers", "no": 194, "name": "5\" Fancy Colour Shot", "price": 900}, {"cat": "New / Fancy Crackers", "no": 195, "name": "Special Fancy Set", "price": 1000}];
-  var productGrid=document.getElementById('productGrid');
-  var productSearch=document.getElementById('productSearch');
-  var productFilter=document.getElementById('productFilter');
-  var productCount=document.getElementById('productCount');
-  var orderSummary=document.getElementById('orderSummary');
-  var sendOrderBtn=document.getElementById('sendOrderBtn');
-  var selected={};
-  var cats=[];
-  productData.forEach(function(p){ if(cats.indexOf(p.cat)<0) cats.push(p.cat); });
-  cats.forEach(function(cat){ var o=document.createElement('option'); o.value=cat; o.textContent=cat; productFilter.appendChild(o); });
-  function renderProducts(){
-    var q=(productSearch.value||'').toLowerCase().trim(), f=productFilter.value;
-    productGrid.innerHTML=''; var shown=0;
-    productData.forEach(function(p){
-      if(f!=='all' && p.cat!==f) return;
-      if(q && !(String(p.no).indexOf(q)>-1 || p.name.toLowerCase().indexOf(q)>-1 || p.cat.toLowerCase().indexOf(q)>-1)) return;
-      shown++;
-      var key=String(p.no), item=document.createElement('label'); item.className='product-item'+(selected[key]?' selected':'');
-      item.innerHTML='<input class="product-check" type="checkbox" '+(selected[key]?'checked':'')+' aria-label="Select '+p.name+'"><div class="product-info"><div class="product-no">ITEM '+p.no+'</div><div class="product-name">'+p.name+'</div><div class="product-cat">'+p.cat+'</div><div class="product-price">₹'+Number(p.price).toLocaleString('en-IN')+'<span class="product-unit">per pack</span></div></div><div class="product-actions"><div class="qty-controls"><button class="qty-btn qty-minus" type="button" aria-label="Decrease quantity">−</button><span class="qty-value">'+(selected[key]||1)+'</span><button class="qty-btn qty-plus" type="button" aria-label="Increase quantity">+</button></div><button class="add-product" type="button">'+(selected[key]?'Added ✓':'＋ Add')+'</button></div>';
-      var addBtn=item.querySelector('.add-product'), minus=item.querySelector('.qty-minus'), plus=item.querySelector('.qty-plus');
-      // Clicking anywhere on the product card selects/unselects it.
-      item.addEventListener('click',function(e){
-        if(e.target.closest('button')) return;
-        if(selected[key]) delete selected[key]; else selected[key]=1;
-        renderProducts(); updateSummary();
-      });
-      addBtn.addEventListener('click',function(){ if(selected[key]) delete selected[key]; else selected[key]=1; renderProducts(); updateSummary(); });
-      minus.addEventListener('click',function(){
-        if(!selected[key]) return;
-        selected[key]--;
-        if(selected[key] <= 0) delete selected[key];
-        renderProducts(); updateSummary();
-      });
-      plus.addEventListener('click',function(){ if(selected[key]){ selected[key]=Math.min(999,selected[key]+1); renderProducts(); updateSummary(); } });
-      productGrid.appendChild(item);
-    });
-    productCount.textContent=shown+' products';
-  }
-  function updateSummary(){
-    var count=Object.keys(selected).length, units=0, total=0;
-    Object.keys(selected).forEach(function(k){var p=productData.find(function(x){return String(x.no)===k;}); if(p){units+=selected[k]; total+=Number(p.price)*selected[k];}});
-    orderSummary.innerHTML=count+' product'+(count===1?'':'s')+' selected<small>'+units+' total unit'+(units===1?'':'s')+' • Estimated total: <strong>₹'+total.toLocaleString('en-IN')+'</strong></small>';
-  }
-  // Render the catalogue immediately when the page loads.
-  // Previously, products appeared only after interacting with search/filter.
-  renderProducts();
-  updateSummary();
-
-  productSearch.addEventListener('input',renderProducts); productFilter.addEventListener('change',renderProducts);
-  sendOrderBtn.addEventListener('click',function(){
-    var keys=Object.keys(selected);
-    if(!keys.length){ alert('Please select at least one product.'); return; }
-    var lines=['*Amudhan Crackers – Order / Enquiry*','','Selected products:'];
-    var total=0;
-    keys.forEach(function(k){var p=productData.find(function(x){return String(x.no)===k;}); if(p){var sub=Number(p.price)*selected[k]; total+=sub; lines.push('• Item '+p.no+' – '+p.name+' × '+selected[k]+' = ₹'+sub.toLocaleString('en-IN'));}});
-    lines.push('','*Estimated Total: ₹'+total.toLocaleString('en-IN')+'*','Please confirm availability and final billing.','Address: 71/3D, 107/4, Amman Kovil Road, Nochikadu, Cuddalore, Tamil Nadu 608801');
-    window.open('https://wa.me/919751113510?text='+encodeURIComponent(lines.join('\n')),'_blank');
-  });
-
+  /* Interactive product grid removed: price list is shown as images only. */
 
 })();
 </script>
